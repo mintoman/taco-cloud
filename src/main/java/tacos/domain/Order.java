@@ -1,30 +1,29 @@
 package tacos.domain;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Data
-@Entity
-@Table(name = "Taco_Order")
+@Document
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
 //    @ManyToOne
 //    private User user;
 
-    private Date placedAt;
+    private Date placedAt = new Date();
 
     @NotBlank(message = "Name is required")
     private String deliveryName;
@@ -45,24 +44,12 @@ public class Order {
     private String ccExpiration;
 
     @Digits(integer = 3, fraction = 0, message = "Invalid CVV")
-    @Column(name = "cc_cvv")
     private String ccCVV;
 
     @NotNull
-    @ManyToMany(targetEntity = Taco.class)
-    @JoinTable(
-            name = "Taco_Order_Tacos",
-            joinColumns = @JoinColumn(name = "taco_order_id"),
-            inverseJoinColumns = @JoinColumn(name = "taco_id")
-    )
     private List<Taco> tacos = new ArrayList<>();
 
     public void addTaco(Taco taco) {
         tacos.add(taco);
-    }
-
-    @PrePersist
-    void placedAt() {
-        this.placedAt = new Date();
     }
 }

@@ -1,26 +1,23 @@
 package tacos.domain;
 
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
-@Entity
-//@Table(name = "Ingredient")
+@AllArgsConstructor
+@Document
 public class Ingredient {
 
     @Id
-    private final String id;
-    private final String name;
+    private String id;
+    private String name;
 
-    @Enumerated(EnumType.STRING)
-    private final Type type;
+    private Type type;
 
-    public static enum Type {
+    public enum Type {
         WRAP, PROTEIN, VEGGIES, CHEESE, SAUCE
     }
+
 }
